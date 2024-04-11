@@ -63,5 +63,5 @@ def animate(t):
     img.set_data(fire_status)
     ax.set_title(f'Step {t}')
 
-ani = FuncAnimation(fig, animate, frames=50, repeat=False)
+ani = FuncAnimation(fig, animate, frames=100, repeat=False)
 plt.show()
