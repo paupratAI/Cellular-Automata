@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
 
-# Constants
-WIDTH, HEIGHT = 20, 20  # Dimensions de la graella
+WIDTH, HEIGHT = map(int, input("Introdueix l'amplada i l'altura de la graella: ").split(' '))
 
 def generate_humidity(height, width):
     # Generar valors aleatoris de humitat entre 0 i 4 per a cada cel·la
