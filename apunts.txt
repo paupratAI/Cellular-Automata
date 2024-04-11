@@ -1,1 +1,1 @@
-2 capes --> humitat i vegetació (tipus numèric), que seran l'entrada al nostre model
+2 capes --> humitat i vegetació (tipus numèric), que seran l'entrada al nostre model.
