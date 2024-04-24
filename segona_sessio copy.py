@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
-import Grid
+from Grid import Grid
 
 """WIDTH, HEIGHT = map(int, input("Introdueix l'amplada i l'altura de la graella: ").split(' '))"""
 
@@ -45,6 +45,9 @@ H = np.max(humidity)
 V = np.max(vegetation)
 
 grid = Grid(HEIGHT, WIDTH, humidity, vegetation)
+grid.init()
+grid.execute(n_iter=100)
+
 
 
 """
