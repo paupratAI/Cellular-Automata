@@ -30,18 +30,32 @@ class Grid:
         self.HUM_MAX = np.max(humidity)
         self.HUM_MIN = np.min(humidity)
 
+
         self.VEG_MAX = np.max(vegetation)
         self.VEG_MIN = np.min(vegetation)
 
         self.humidity_colors = {}
         self.vegetation_colors = {}
+        self.fire_colors = {}
+
+        hum_mult = 0.4 / self.HUM_MAX
+        hum_basis = [0, 0, 0]
+
+        veg_mult_r = 0.15 / self.VEG_MAX
+        veg_mult_g = 0.3 / self.VEG_MAX
+        veg_basis = [0, 0.4, 0]
+
+        fire_mult_r = 0.25 / self.VEG_MAX
+        fire_mult_g = 0.3 / self.VEG_MAX 
+
+        fire_basis = [0.75, 0.2, 0]
 
         for hum in range(self.HUM_MIN, self.HUM_MAX+1):
-            self.humidity_colors[f"{hum}"] = [0,0, ((self.HUM_MAX - hum) / self.HUM_MAX)*0.4]
-        
+            self.humidity_colors[f"{hum}"] = [ hum_basis[0], hum_basis[1], hum * hum_mult + hum_basis[2]]
+
         for veg in range(self.VEG_MIN, self.VEG_MAX+1):
-            self.vegetation_colors[f"{veg}"] = [((self.VEG_MAX-veg)/self.VEG_MAX)*0.15, ((veg) / self.VEG_MAX)*0.3+0.4, 0]
-        
+            self.vegetation_colors[f"{veg}"] = [(self.VEG_MAX - veg) * veg_mult_r + veg_basis[0], (self.VEG_MAX - veg) * veg_mult_g + veg_basis[1], veg_basis[2]]
+            self.fire_colors[f"{veg}"] = [veg * fire_mult_r + fire_basis[0], veg * fire_mult_g + fire_basis[1], fire_basis[2]]
 
 
         self.updated_cells = {}   # Vector que indica si una casilla ha sido actualizada, para colorear solo estas
@@ -113,7 +127,7 @@ class Grid:
             if h_level > 0:
                 self.color_grid[i,j] = list(map(add, self.humidity_colors[f'{h_level}'], self.vegetation_colors[f'{v_level}']))
             elif self.fire_status[i,j] == 1:
-                self.color_grid[i,j] = [1,0,0]
+                self.color_grid[i,j] = self.fire_colors[f'{v_level}']
             elif self.fire_status[i,j] == 2:
                 self.color_grid[i,j] = [0,0,0]
         self.updated_cells = {}  # Reseteamos las casillas actualizadas

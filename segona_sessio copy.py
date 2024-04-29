@@ -33,7 +33,7 @@ else:
 
 WIDTH,HEIGHT = 50,50
 
-if True:
+if False:
     humidity = generate_humidity(100,100)
     vegetation = generate_vegetation(100,100)
     pd.DataFrame(humidity).to_csv("humidity.csv", index=False, header=False)
