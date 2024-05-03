@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
 from Grid import Grid
+from perlin_noise import PerlinNoise
 
 """WIDTH, HEIGHT = map(int, input("Introdueix l'amplada i l'altura de la graella: ").split(' '))"""
 
@@ -16,6 +17,10 @@ def generate_vegetation(height, width):
     # Generar valors aleatoris de vegetació entre 1 i 10 per a cada cel·la
     data = np.random.randint(0, 10, (height, width))
     return data
+
+def generate_rivers(height, width):
+    noise = PerlinNoise()
+
 
 
 # Preguntar a l'usuari si vol generar nous fitxers
@@ -46,8 +51,9 @@ V = np.max(vegetation)
 
 grid = Grid(HEIGHT, WIDTH, humidity, vegetation)
 grid.init()
-grid.execute(n_iter=100)
-
+ani = grid.execute(n_iter=100)
+ani = grid.ani
+plt.show()
 
 
 """

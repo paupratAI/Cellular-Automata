@@ -148,5 +148,6 @@ class Grid:
         self.img = self.ax.imshow(self.color_grid)
         self.ax.axis('off')
 
-        ani = FuncAnimation(self.fig, animate, frames=n_iter, repeat=False, interval=200)
-        plt.show()
+        self.ani = FuncAnimation(self.fig, animate, frames=n_iter, repeat=False, interval=200)
+
+        return self.ani
