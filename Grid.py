@@ -8,7 +8,7 @@ from operator import add
 
 
 class Grid:
-    def __init__(self, height: int, width: int, humidity: np.array, vegetation: np.array) -> None:
+    def __init__(self, height: int, width: int, humidity: np.array, vegetation: np.array, rivers: np.array) -> None:
         self.height = height
         self.width = width
         
@@ -26,6 +26,7 @@ class Grid:
 
         self.vegetation = vegetation
         self.humidity = humidity
+        self.rivers = rivers
 
         self.HUM_MAX = np.max(humidity)
         self.HUM_MIN = np.min(humidity)
@@ -86,7 +87,7 @@ class Grid:
                     surrounds.remove((i,j+1))
                     
                 for i_radius,j_radius in surrounds:
-                    if self.fire_status[i_radius,j_radius] == 0:
+                    if self.fire_status[i_radius,j_radius] == 0 and self.rivers[i_radius,j_radius]==0:
                         self.fire_status[i_radius,j_radius] = 1
                         self.fire_start_cells[i_radius,j_radius] = 1
                         self.updated_cells[i,j] = 1
