@@ -43,6 +43,39 @@ def generate_terrain(width, height, scale, octaves, persistence, lacunarity, see
     rivers = discretized_terrain<=threshold_water
     return rivers, discretized_terrain
 
+def create_doc( variable, data_type, columns, rows, ref_units, unit_dist, min_x, max_x, min_y, max_y, resolution, min_value, max_value, data):
+    filename = f"{variable}.doc"
+    with open(filename, 'w') as file:
+        file.write(f'file title  : {variable}\n')
+        file.write(f'data type   : {data_type}\n')
+        file.write(f'file type   : ascii\n')
+        file.write(f'columns     : {columns}\n')
+        file.write(f'rows        : {rows}\n')
+        file.write(f'ref.system  : plane\n')
+        file.write(f'ref.units   : {ref_units}\n')
+        file.write(f'unit dist.  : {unit_dist}\n')
+        file.write(f'min. X      : {min_x}\n')
+        file.write(f'max. X      : {max_x}\n')
+        file.write(f'min. Y      : {min_y}\n')
+        file.write(f'max. Y      : {max_y}\n')
+        file.write(f"pos 'n error: unknown\n")
+        file.write(f'resolution  : {resolution}\n')
+        file.write(f'min. value  : {min_value}\n')
+        file.write(f'max. value  : {max_value}\n')
+        file.write(f'Value units : unspecified\n')
+        file.write(f'Value Error : unknown\n')
+        file.write(f'flag Value  : none\n')
+        file.write(f"flag def 'n : none\n")
+        file.write(f'legend cats : 0\n')
+
+    filename = f"{variable}.img"
+    with open(filename, 'w') as file:
+        for row in data[:data.shape[0]-1]:
+            x = '\n'.join(map(str, row))
+            file.write(f'{x}\n')
+        x = '\n'.join(map(str, data[data.shape[0]-1]))
+        file.write(f'{x}')
+
 # Generació de dades i emmagatzematge en arxius CSV
 if generate_new_grid:
     rivers, _ = generate_terrain(WIDTH, HEIGHT, scale, octaves, persistence, lacunarity, seed, threshold_water)
@@ -50,8 +83,13 @@ if generate_new_grid:
     vegetation = generate_vegetation(WIDTH, HEIGHT, seed)
 
     pd.DataFrame(humidity).to_csv("humidity.csv", index=False, header=False)
+    create_doc("humidity", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(humidity), np.max(humidity), humidity)
+
     pd.DataFrame(vegetation).to_csv("vegetation.csv", index=False, header=False)
+    create_doc("vegetation", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(vegetation), np.max(vegetation), vegetation)
+
     pd.DataFrame(rivers).to_csv("rivers.csv", index=False, header=False)
+    create_doc("rivers", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(rivers), np.max(rivers), rivers)
 else:             
     humidity = pd.read_csv("humidity.csv", header=None).values
     vegetation = pd.read_csv("vegetation.csv", header=None).values
