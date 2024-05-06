@@ -10,7 +10,7 @@ from noise import pnoise2
 WIDTH, HEIGHT = 100, 100
 n_iterations = 200
 fire_init = [(0, 0), (0, 50), (50, 50)]
-generate_new_grid = True
+generate_new_grid = False
 
 # Paràmetres de generació de terren
 scale = 100.0  
@@ -44,7 +44,7 @@ def generate_terrain(width, height, scale, octaves, persistence, lacunarity, see
     return rivers, discretized_terrain
 
 def create_doc( variable, data_type, columns, rows, ref_units, unit_dist, min_x, max_x, min_y, max_y, resolution, min_value, max_value, data):
-    filename = f"{variable}.doc"
+    filename = f"./doc_img/{variable}.doc"
     with open(filename, 'w') as file:
         file.write(f'file title  : {variable}\n')
         file.write(f'data type   : {data_type}\n')
@@ -68,7 +68,7 @@ def create_doc( variable, data_type, columns, rows, ref_units, unit_dist, min_x,
         file.write(f"flag def 'n : none\n")
         file.write(f'legend cats : 0\n')
 
-    filename = f"{variable}.img"
+    filename = f"./doc_img/{variable}.img"
     with open(filename, 'w') as file:
         for row in data[:data.shape[0]-1]:
             x = '\n'.join(map(str, row))
@@ -82,18 +82,18 @@ if generate_new_grid:
     humidity = generate_humidity(WIDTH, HEIGHT, rivers, seed)
     vegetation = generate_vegetation(WIDTH, HEIGHT, seed)
 
-    pd.DataFrame(humidity).to_csv("humidity.csv", index=False, header=False)
+    pd.DataFrame(humidity).to_csv("./doc_img/humidity.csv", index=False, header=False)
     create_doc("humidity", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(humidity), np.max(humidity), humidity)
 
-    pd.DataFrame(vegetation).to_csv("vegetation.csv", index=False, header=False)
+    pd.DataFrame(vegetation).to_csv("./doc_img/vegetation.csv", index=False, header=False)
     create_doc("vegetation", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(vegetation), np.max(vegetation), vegetation)
 
-    pd.DataFrame(rivers).to_csv("rivers.csv", index=False, header=False)
+    pd.DataFrame(rivers).to_csv("./doc_img/rivers.csv", index=False, header=False)
     create_doc("rivers", "integer", WIDTH, HEIGHT, "m", 15, 0, WIDTH, 0, HEIGHT, 30, np.min(rivers), np.max(rivers), rivers)
 else:             
-    humidity = pd.read_csv("humidity.csv", header=None).values
-    vegetation = pd.read_csv("vegetation.csv", header=None).values
-    rivers = pd.read_csv("rivers.csv", header=None).values
+    humidity = pd.read_csv("./doc_img/humidity.csv", header=None).values
+    vegetation = pd.read_csv("./doc_img/vegetation.csv", header=None).values
+    rivers = pd.read_csv("./doc_img/rivers.csv", header=None).values
 
 # Màxims valors d'humitat i vegetació
 H = np.max(humidity)

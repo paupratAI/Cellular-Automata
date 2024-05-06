@@ -16,9 +16,7 @@ class Grid:
         # Color predeterminat de la graella
         self.color_grid = np.array([[[0,0.4,0] for _ in range(width)] for _ in range(height)], dtype=float)
         self.fire_status = np.zeros((height, width))
-        #self.fire_start = np.zeros((height, width))
-        #self.fire_burning = np.zeros((height, width))
-        #self.fire_burnt = np.zeros((height, width))
+
         
         self.fire_start_cells = {}
         self.fire_burning_cells = {}
