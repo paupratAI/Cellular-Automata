@@ -62,10 +62,11 @@ class Grid:
         self.updated_cells = {}   # Vector que indica si una casilla ha sido actualizada, para colorear solo estas
         self.t = 0
 
-    def init(self):
-        """Inicializamos la cuadrícula, con vegetación, humedad y fuego"""
-        self.fire_status[self.height//2, self.width//2] = 1  # Iniciem el foc al centre
-        self.fire_start_cells[self.height//2, self.width//2] = 1
+    def init(self, fire_init):
+        """Inicializamos la cuadrícula, con vegetación, humedad y fuego"""      
+        for cell in fire_init:
+            self.fire_status[cell] = 1  # Iniciem el foc al centre
+            self.fire_start_cells[cell] = 1
         for i in range(self.height): 
             for j in range(self.width): 
                 self.updated_cells[i,j] = 1 
@@ -125,7 +126,9 @@ class Grid:
         for i,j in self.updated_cells:
             h_level = self.humidity[i,j] 
             v_level = self.vegetation[i,j]
-            if h_level > 0:
+            if self.rivers[i,j] == 1:
+                self.color_grid[i,j] = [0.1,0.2,0.9]
+            elif h_level > 0:
                 self.color_grid[i,j] = list(map(add, self.humidity_colors[f'{h_level}'], self.vegetation_colors[f'{v_level}']))
             elif self.fire_status[i,j] == 1:
                 self.color_grid[i,j] = self.fire_colors[f'{v_level}']
@@ -133,7 +136,7 @@ class Grid:
                 self.color_grid[i,j] = [0,0,0]
         self.updated_cells = {}  # Reseteamos las casillas actualizadas
 
-    def execute(self, n_iter = 50):
+    def execute(self, n_iter = 50, fire_init=[(0,0)]):
             
         def animate(t):    
             self.update_humidity()
@@ -145,10 +148,10 @@ class Grid:
 
         self.fig, self.ax = plt.subplots()
 
-        self.init()
+        self.init(fire_init=fire_init)
         self.img = self.ax.imshow(self.color_grid)
         self.ax.axis('off')
 
-        self.ani = FuncAnimation(self.fig, animate, frames=n_iter, repeat=False, interval=200)
+        self.ani = FuncAnimation(self.fig, animate, frames=n_iter, repeat=False, interval=100)
 
         return self.ani
