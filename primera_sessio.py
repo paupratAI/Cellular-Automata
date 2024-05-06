@@ -2,16 +2,16 @@ import matplotlib.pyplot as plt
 
 def apply_rule(rule, left, center, right):
     """
-    Aplica la regla del autòmat cel·lular a un conjunt de tres cèl·lules.
+    Aplica la regla del autòmat cel·lular a un conjunt de tres cel·les.
 
     Args:
     rule (int): Número de la regla en decimal.
-    left (int): Estat de la cèl·lula esquerra.
-    center (int): Estat de la cèl·lula central.
-    right (int): Estat de la cèl·lula dreta.
+    left (int): Estat de la cel·la esquerra.
+    center (int): Estat de la cel·la central.
+    right (int): Estat de la cel·la dreta.
 
     Returns:
-    int: Nou estat de la cèl·lula central basat en la regla.
+    int: Nou estat de la cel·la central basat en la regla.
     """
     binary_rule = f"{rule:08b}"
     index = 7 - (left*4 + center*2 + right*1)
@@ -19,13 +19,13 @@ def apply_rule(rule, left, center, right):
 
 def generate_initial_state(length=100):
     """
-    Genera un estat inicial per l'autòmat amb una sola cèl·lula activa al centre.
+    Genera un estat inicial per l'autòmat amb una sola cel·la activa al centre.
 
     Args:
-    length (int): Longitud total de l'array de cèl·lules.
+    length (int): Longitud total de l'array de cel·les.
 
     Returns:
-    list: Llista de cèl·lules amb una cèl·lula activa al centre.
+    list: Llista de cel·les amb una cel·la activa al centre.
     """
     return [0]*(length//2) + [1] + [0]*(length//2)
 
@@ -34,7 +34,7 @@ def evolve_multilayer(initial_cells, rules, generations=30):
     Evoluciona un autòmat cel·lular multicapa a través de múltiples generacions.
 
     Args:
-    initial_cells (list): Llista d'estats inicials de cèl·lules.
+    initial_cells (list): Llista d'estats inicials de cel·les.
     rules (list of int): Llista de regles en decimal per a cada capa.
     generations (int): Nombre de generacions per evolucionar.
 
@@ -69,7 +69,7 @@ def plot_evolution(history):
     plt.figure(figsize=(14, 8))
     plt.imshow(history, cmap='binary', interpolation='none')
     plt.title('Evolució de l\'Autòmat Cel·lular')
-    plt.xlabel('Posició de la Cèl·lula')
+    plt.xlabel('Posició de la Cel·la')
     plt.ylabel('Generació')
     plt.show()
 
