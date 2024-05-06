@@ -44,6 +44,6 @@ legend cats : 0
     
     print(f"Generated file: {output_file_path}")
 
-# Exemple d'ús
+# Creem un fitxer d'informació per a tots els fitxers CSV
 for file in ['humidity.csv', 'vegetation.csv', 'terrain.csv', 'rivers.csv']:
     generate_txt_from_csv(file)
