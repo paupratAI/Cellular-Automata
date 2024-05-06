@@ -9,9 +9,11 @@ from operator import add
 
 class Grid:
     def __init__(self, height: int, width: int, humidity: np.array, vegetation: np.array, rivers: np.array) -> None:
+        """Inicialitza la graella amb els paràmetres de dimensió, humitat, vegetació i rius."""
         self.height = height
         self.width = width
         
+        # Color predeterminat de la graella
         self.color_grid = np.array([[[0,0.4,0] for _ in range(width)] for _ in range(height)], dtype=float)
         self.fire_status = np.zeros((height, width))
         #self.fire_start = np.zeros((height, width))
@@ -21,16 +23,14 @@ class Grid:
         self.fire_start_cells = {}
         self.fire_burning_cells = {}
         self.fire_burnt_cells = {}
-        
  
-
         self.vegetation = vegetation
         self.humidity = humidity
         self.rivers = rivers
 
+        # Màxims i mínims per a la normalització de colors
         self.HUM_MAX = np.max(humidity)
         self.HUM_MIN = np.min(humidity)
-
 
         self.VEG_MAX = np.max(vegetation)
         self.VEG_MIN = np.min(vegetation)
@@ -39,6 +39,7 @@ class Grid:
         self.vegetation_colors = {}
         self.fire_colors = {}
 
+        # Càlcul dels colors basat en la humitat i vegetació
         hum_mult = 0.4 / self.HUM_MAX
         hum_basis = [0, 0, 0]
 
@@ -63,7 +64,7 @@ class Grid:
         self.t = 0
 
     def init(self, fire_init):
-        """Inicializamos la cuadrícula, con vegetación, humedad y fuego"""      
+        """Inicialitza la simulació amb foc a la cel·la del centre."""
         for cell in fire_init:
             self.fire_status[cell] = 1  # Iniciem el foc al centre
             self.fire_start_cells[cell] = 1
@@ -72,10 +73,10 @@ class Grid:
                 self.updated_cells[i,j] = 1 
 
     def update_fire(self):
-        """Actualizamos el estado del fuego, guardamos en un vector fuego == 1 las casillas cuyo fuego es 1, y aquellas que hayan propagado el fuego, lo pasamos a 2 (quemado)"""
+        """Actualitza l'estat del foc, propagant el foc i extingint-lo si no hi ha vegetació."""
         fire_burning_cells_copy = self.fire_burning_cells.copy()
         for i, j in self.fire_burning_cells:
-            # Extender el fuego a casillas próximas
+            # Propaga el foc a les cel·les veïnes
                 surrounds = [(i+1, j), (i, j+1), (i-1, j), (i, j-1)]
                 if i*j==0:
                     if i==0:
@@ -93,9 +94,9 @@ class Grid:
                         self.fire_start_cells[i_radius,j_radius] = 1
                         self.updated_cells[i,j] = 1
 
-                # Extinguir el fuego si se queda sin vegetación
+                # Extingir el foc si es queda sense vegetació
                 if self.vegetation[i,j]==0:
-                    self.fire_status[i,j] = 2  # 2 simboliza fuego extinto y casilla quemada
+                    self.fire_status[i,j] = 2  # 2 simbolitza foc extingit i cel·la cremada
                     del fire_burning_cells_copy[i,j]
                     self.updated_cells[i,j] = 1
 
@@ -109,20 +110,21 @@ class Grid:
         self.fire_start_cells = fire_start_cells_copy
 
     def update_humidity(self): 
-        """Actualizamos la humedad de cada casilla, en caso de tener fuego, ya que al no tener la consideraremos quemada"""
+        """Disminueix la humitat en les cel·les amb foc"""
         for i,j in self.fire_start_cells:
             if self.humidity[i,j] > 0:
                 self.humidity[i,j] -= 1
                 self.updated_cells[i,j] = 1
         
     def update_vegetation(self):
+        """Disminueix la vegetació en les cel·les que s'estan cremant"""
         for i,j in self.fire_burning_cells:
             if self.vegetation[i,j] > 0:
                 self.vegetation[i,j] -= 1
                 self.updated_cells[i,j] = 1
 
     def update_colors(self):
-        """Actualizamos los colores de las casillas, en función de la humedad, la vegetación y el fuego"""
+        """Actualitza els colors de la graella basat en l'estat actual de humitat, vegetació i foc."""
         for i,j in self.updated_cells:
             h_level = self.humidity[i,j] 
             v_level = self.vegetation[i,j]
@@ -137,7 +139,7 @@ class Grid:
         self.updated_cells = {}  # Reseteamos las casillas actualizadas
 
     def execute(self, n_iter = 50, fire_init=[(0,0)]):
-            
+        """Executa la simulació visual del foc en la graella."""
         def animate(t):    
             self.update_humidity()
             self.update_vegetation()
