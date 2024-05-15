@@ -35,7 +35,7 @@ Simulate forest fire propagation using multi-layer cellular automata representin
 - **Water Bodies**: Generated using Perlin noise, blocks fire propagation.
 
 ### Python Implementation
-- **`segona_sessio.py`**: Initializes or creates data, then calls `Grid` to create the simulation.
+- **`segona_sessio.py`**: Initializes data, then calls `Grid` to create the simulation.
 - **`Grid.py`**: Contains the `Grid` class for simulating and animating the forest fire.
 
 ### Conclusions
